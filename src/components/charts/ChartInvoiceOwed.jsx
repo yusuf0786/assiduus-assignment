@@ -58,7 +58,7 @@ export function ChartInvoiceOwed({
 
     return (
       <>
-      <Stack className="card-header" direction="row" justifyContent="space-between" sx={{boxShadow: 1, padding:"1rem"}}>
+      <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow: 1, padding:"1rem"}}>
         <Typography variant="h6" component="h3" fontWeight={700}>Invoices owed to you</Typography>
         <Box className="card-interaction" display="flex">
           <Button variant="outlined" disableElevation>New Sales Invoice</Button>

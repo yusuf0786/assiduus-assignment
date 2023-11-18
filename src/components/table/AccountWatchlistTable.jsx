@@ -24,7 +24,7 @@ const rows = [
 export function AccountWatchlistTable() {
   return (
     <>
-    <Stack className="card-header" direction="row" justifyContent="space-between" sx={{boxShadow:1, padding:"1rem"}}>
+    <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow:1, padding:"1rem"}}>
         <Typography variant="h6" component="h3" fontWeight={700}>Account watchlist</Typography>
     </Stack>
     <Box className="card-body">

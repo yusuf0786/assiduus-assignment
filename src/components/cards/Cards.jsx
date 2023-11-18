@@ -1,9 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
-import {MenuItem, Select, FormControl, CardContent, CardActions, Card, InputLabel} from '@mui/material';
+import {CardContent, Card} from '@mui/material';
 
-import {Box, Button, Typography, Stack, Grid} from '@mui/material';
-
-import * as d3 from "d3";
+import {Grid} from '@mui/material';
 
 // chart components import
 import {ChartCheckingAccount} from "../charts/chart-checking-account/ChartCheckingAccount"

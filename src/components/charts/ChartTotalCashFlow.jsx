@@ -75,7 +75,7 @@ export function ChartTotalCashFlow({
   
     return (
         <>
-        <Stack className="card-header" direction="row" justifyContent="space-between" sx={{boxShadow:1, padding:"1rem"}}>
+        <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow:1, padding:"1rem"}}>
             <Typography variant="h6" component="h3" fontWeight={700}>Total cash flow</Typography>
             <Box className="card-interaction" display="flex">
                 <Box display="flex" alignItems="center" marginRight="0.5rem">

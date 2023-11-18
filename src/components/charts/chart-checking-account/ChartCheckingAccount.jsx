@@ -56,13 +56,13 @@ export function ChartCheckingAccount({
     return chartData.map(d => ({
       x: d.x,
       y: d.y,
-      yvalue: Math.floor((Math.random() * 400) + 1)
+      yvalue: Math.floor((Math.random() * 400) + 90),
     }))
   }
 
   return (
     <>
-      <Stack className="card-header" direction="row" justifyContent="space-between" sx={{boxShadow:1, padding:"1rem"}}>
+      <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow:1, padding:"1rem"}}>
           <Typography variant="h6" component="h3" fontWeight={700}>Checking account</Typography>
           <Box className="card-interaction" display="flex">
             <FormControl fullWidth sx={{marginRight: "1rem"}}>
