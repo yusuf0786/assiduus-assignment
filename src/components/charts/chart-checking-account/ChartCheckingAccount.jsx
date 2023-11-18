@@ -56,7 +56,7 @@ export function ChartCheckingAccount({
     return chartData.map(d => ({
       x: d.x,
       y: d.y,
-      yvalue: Math.floor((Math.random() * 400) + 90),
+      yvalue: Math.floor((Math.random() * 400) + 100),
     }))
   }
 

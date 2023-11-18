@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, NavLink } from "react-router-dom"
 import { useState, useRef, useEffect, useId } from 'react'
-import { CssBaseline, ListItemText, ListItemIcon, ListItemButton, ListItem, Divider, List, Drawer, InputBase, Container, Toolbar, Tooltip, AppBar, IconButton, Badge, ClickAwayListener, Menu, MenuList, MenuItem, Popper, Paper, Grow, Avatar, Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
+import { ListItemText, ListItemIcon, ListItemButton, ListItem, List, Drawer, InputBase, Container, Toolbar, Tooltip, AppBar, IconButton, Badge, ClickAwayListener, Menu, MenuItem, Avatar, Box, Typography } from "@mui/material";
 import logo from "../../assets/img/logo.png"
 import avatarImg from "../../assets/img/myimg.png"
 import MenuIcon from '@mui/icons-material/Menu';
@@ -151,20 +151,20 @@ export function Header() {
                                     </IconButton>
                                 </Tooltip>
                                 <Menu
-                                sx={{ mt: '45px' }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
                                 >
                                 {settings.map((setting) => (
                                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
@@ -190,116 +190,118 @@ export function Header() {
                         </Box>
                     </Toolbar>
                 </Container>
-                <Drawer
-                    variant="permanent"
-                    anchor={windowWidth > 900 ? "left" : "right"}
-                    sx={{
-                        width: drawerWidth,
-                        flexShrink: 0,
-                        boxShadow: 0,
-                        [`& .MuiDrawer-paper`]: { 
-                            width: drawerWidth, 
-                            boxSizing: 'border-box',
-                            transform: "translate(0%, 0%) !important",
-                            transitionProperty: "transform",
-                            transitionDuration: "0.5s",
-                            "@media only screen and (max-width:900px)": {
-                                ...(!open && { 
-                                    transform: "translate(100%, 0%) !important",
-                                }),
+                <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleCloseNavMenu}>
+                    <Drawer
+                        open={open}
+                        variant="permanent"
+                        anchor={windowWidth > 900 ? "left" : "right"}
+                        sx={{
+                            width: drawerWidth,
+                            flexShrink: 0,
+                            boxShadow: 0,
+                            [`& .MuiDrawer-paper`]: { 
+                                width: drawerWidth, 
+                                boxSizing: 'border-box',
+                                transform: "translate(0%, 0%) !important",
+                                transitionProperty: "transform",
+                                transitionDuration: "0.5s",
+                                "@media only screen and (max-width:900px)": {
+                                    ...(!open && { 
+                                        transform: "translate(100%, 0%) !important",
+                                    }),
+                                },
                             },
-                        },
-                        ".MuiPaper-root": {
-                            border: 0,
-                        },
-                    }}
-                >
-                    {/* <DrawerHeader><Box className="logo"><img src={logo} alt="Logo" /></Box></DrawerHeader> */}
-                    <Toolbar>
-                        <Box className="logo" display={{xs: "none", md: "block"}}>
-                            <img src={logo} alt="Logo" />
+                            ".MuiPaper-root": {
+                                border: 0,
+                            },
+                        }}
+                    >
+                        <Toolbar>
+                            <Box className="logo" display={{xs: "none", md: "block"}}>
+                                <img src={logo} alt="Logo" />
+                            </Box>
+                            <Box className="close-btn" display={{xs: "block", md: "none"}}>
+                                <IconButton
+                                    color="#000"
+                                    aria-label="close drawer"
+                                    edge="end"
+                                    onClick={handleCloseNavMenu}
+                                    sx={{ ...(!open && { display: 'none' }) }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </Box>
+                        </Toolbar>
+                        <Box sx={{ overflow: 'auto' }}>
+                            <List sx={{display: {xs:"block", md:"none"}, }}>
+                                <ListItem key={searchItemId} disablePadding sx={{padding: "8px 1.75rem"}}>
+                                    <Search sx={{margin:"0 !important", width:"100% !important"}}>
+                                        <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
+                                        <StyledInputBase type='text' inputProps={{ 'aria-label': 'search' }} />
+                                    </Search>
+                                </ListItem>
+                                <ListItem key={actionItemId} disablePadding sx={{display: "flex", justifyContent: "space-between"}}>
+                                        <ListItemButton sx={{padding: "8px 1.75rem"}} >
+                                            <ListItemIcon>
+                                                <Badge color="notificationBadgeColor" variant="dot">
+                                                    <NotificationsIcon />
+                                                </Badge>
+                                            </ListItemIcon>
+                                            <ListItemText primary="Some Actions" />
+                                        </ListItemButton>
+                                </ListItem>
+                                <ListItem key={userMenuItemId} disablePadding>
+                                        <ListItemButton sx={{padding: "8px 1.75rem"}} >
+                                            <Tooltip title="Open settings">
+                                                <IconButton disableRipple onClick={handleOpenUserMenu} sx={{ p: 0, width: "100%" }}>
+                                                    <Avatar src={avatarImg} alt="Avatar Image" sx={{marginRight:"1rem"}}/>
+                                                    <ListItemText sx={{textAlign:"left"}} primary="User Settings" />
+                                                    <ArrowDropDownIcon/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Menu
+                                                sx={{ mt: '45px' }}
+                                                id="menu-appbar"
+                                                anchorEl={anchorElUser}
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
+                                                }}
+                                                keepMounted
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
+                                                }}
+                                                open={Boolean(anchorElUser)}
+                                                onClose={handleCloseUserMenu}
+                                            >
+                                            {settings.map((setting) => (
+                                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                                        <Typography textAlign="center">{setting}</Typography>
+                                                </MenuItem>
+                                            ))}
+                                            </Menu>
+                                        </ListItemButton>
+                                </ListItem>
+                            </List>
+                            <List sx={{padding: {xs: 0, md: "1.25rem 0 0 0"}, }}>
+                                {drawerItemsDetails.map((itemDetail, index) => (
+                                <ListItem key={itemDetail.text} disablePadding>
+                                    <NavLink to={itemDetail.path} className="drawer-nav-link">
+                                        <ListItemButton sx={{padding: "8px 1.75rem"}} >
+                                            <ListItemIcon>
+                                                {itemDetail.icon}
+                                            </ListItemIcon>
+                                            <ListItemText primary={itemDetail.text} />
+                                        </ListItemButton>
+                                    </NavLink>
+                                </ListItem>
+                                ))}
+                            </List>
+                            {/* <Divider /> */}
                         </Box>
-                        <Box className="close-btn" display={{xs: "block", md: "none"}}>
-                            <IconButton
-                                color="#000"
-                                aria-label="close drawer"
-                                edge="end"
-                                onClick={handleCloseNavMenu}
-                                sx={{ ...(!open && { display: 'none' }) }}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </Box>
-                    </Toolbar>
-                    <Box sx={{ overflow: 'auto' }}>
-                        <List sx={{display: {xs:"block", md:"none"}, }}>
-                            <ListItem key={searchItemId} disablePadding sx={{padding: "8px 1.75rem"}}>
-                                <Search sx={{margin:"0 !important", width:"100% !important"}}>
-                                    <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
-                                    <StyledInputBase type='text' inputProps={{ 'aria-label': 'search' }} />
-                                </Search>
-                            </ListItem>
-                            <ListItem key={actionItemId} disablePadding sx={{display: "flex", justifyContent: "space-between"}}>
-                                    <ListItemButton sx={{padding: "8px 1.75rem"}} >
-                                        <ListItemIcon>
-                                            <Badge color="notificationBadgeColor" variant="dot">
-                                                <NotificationsIcon />
-                                            </Badge>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Some Actions" />
-                                    </ListItemButton>
-                            </ListItem>
-                            <ListItem key={userMenuItemId} disablePadding>
-                                    <ListItemButton sx={{padding: "8px 1.75rem"}} >
-                                        <Tooltip title="Open settings">
-                                            <IconButton disableRipple onClick={handleOpenUserMenu} sx={{ p: 0, width: "100%" }}>
-                                                <Avatar src={avatarImg} alt="Avatar Image" sx={{marginRight:"1rem"}}/>
-                                                <ListItemText sx={{textAlign:"left"}} primary="User Settings" />
-                                                <ArrowDropDownIcon/>
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Menu
-                                            sx={{ mt: '45px' }}
-                                            id="menu-appbar"
-                                            anchorEl={anchorElUser}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            keepMounted
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            open={Boolean(anchorElUser)}
-                                            onClose={handleCloseUserMenu}
-                                        >
-                                        {settings.map((setting) => (
-                                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                                    <Typography textAlign="center">{setting}</Typography>
-                                            </MenuItem>
-                                        ))}
-                                        </Menu>
-                                    </ListItemButton>
-                            </ListItem>
-                        </List>
-                        <List sx={{padding: {xs: 0, md: "1.25rem 0 0 0"}, }}>
-                            {drawerItemsDetails.map((itemDetail, index) => (
-                            <ListItem key={itemDetail.text} disablePadding>
-                                <NavLink to={itemDetail.path} className="drawer-nav-link">
-                                    <ListItemButton sx={{padding: "8px 1.75rem"}} >
-                                        <ListItemIcon>
-                                            {itemDetail.icon}
-                                        </ListItemIcon>
-                                        <ListItemText primary={itemDetail.text} />
-                                    </ListItemButton>
-                                </NavLink>
-                            </ListItem>
-                            ))}
-                        </List>
-                        {/* <Divider /> */}
-                    </Box>
-                </Drawer>
+                    </Drawer>
+                </ClickAwayListener>
             </AppBar>
         </>
     )
