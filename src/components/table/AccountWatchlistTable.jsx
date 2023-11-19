@@ -28,7 +28,7 @@ export function AccountWatchlistTable() {
         <Typography variant="h6" component="h3" fontWeight={700}>Account watchlist</Typography>
     </Stack>
     <Box className="card-body">
-      <TableContainer component={Paper} sx={{boxShadow:0, background: "none"}}>
+      <TableContainer component={Paper} sx={{ boxShadow:0, background: "none", }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>

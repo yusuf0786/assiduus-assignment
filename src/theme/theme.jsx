@@ -69,7 +69,8 @@ export const theme = createTheme({
         styleOverrides:{
           root: {
             color: "inherit",
-            border:0
+            border:0,
+            fontWeight: 700,
           }
         }
       },

@@ -70,9 +70,9 @@ export function Cards() {
         <Grid container spacing={5}>
         {cardComponents.map( (item, index) => {
         return (
-            <Grid key={index} item xs={12} lg={6}>
+            <Grid key={index} item xs={12} lg={6} className="card-container">
                 <Card sx={{background: "#fff", boxShadow:0, borderRadius: "12px"}}>
-                    <CardContent ref={cardContentElement} sx={{padding:0}}>
+                    <CardContent ref={cardContentElement} sx={{padding:"0 !important"}}>
                         {item.component}
                     </CardContent>
                 </Card>
