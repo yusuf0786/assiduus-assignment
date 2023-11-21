@@ -187,7 +187,7 @@ function Header(props, ref) {
                 </Container>
                 {/* Drawer AKA sidebar */}
                 <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleCloseNavMenu}>
-                    <Drawer open={open} variant="permanent" anchor={windowWidth > 900 ? "left" : "right"}
+                    <Drawer open={open} variant={ windowWidth <= 900 ? "temporary" : "permanent"} onClose={() => setOpen(false)} anchor={windowWidth > 900 ? "left" : "right"}
                         sx={{
                             width: drawerWidth,
                             flexShrink: 0,

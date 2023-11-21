@@ -20,6 +20,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       marginLeft: `${drawerWidth}px`,
       "@media only screen and (max-width:900px)": {
         marginLeft: "0px",
+        padding: theme.spacing(2),
       },
       ...(open && {
         transition: theme.transitions.create('margin', {

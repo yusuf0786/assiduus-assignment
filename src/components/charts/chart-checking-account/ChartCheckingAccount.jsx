@@ -9,7 +9,8 @@ import { extent } from 'd3-array';
 
 import {MenuItem, Select, FormControl, Box, Typography, Stack} from '@mui/material';
 
-const dateDropdownItems = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Novembar", "Decembar"]
+const manageDropdownItems = ["Manage", "Manage", "Manage"];
+const dateDropdownItems = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Novembar", "Decembar"];
 
 function ChartCheckingAccount({
   data,
@@ -69,7 +70,7 @@ function ChartCheckingAccount({
   return (
     <>
       <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow:1, padding:"1rem"}}>
-          <Typography variant="h6" component="h3" fontWeight={700}>Checking account</Typography>
+          <Typography marginRight={1} variant="h6" component="h3" fontWeight={700}>Checking account</Typography>
           <Box className="card-interaction" display="flex">
             <FormControl fullWidth sx={{marginRight: "1rem"}}>
               {/* <InputLabel id="demo-simple-select-label">Manage</InputLabel> */}
@@ -82,10 +83,7 @@ function ChartCheckingAccount({
                   setAccountManage(e.target.value)
                   setRandomData()
               }}
-              >
-                  <MenuItem value={"Manage"}>Manage</MenuItem>
-                  <MenuItem value={"Value two"}>Value two</MenuItem>
-                  <MenuItem value={"Value three"}>Value three</MenuItem>
+              >{manageDropdownItems.map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
               </Select>
             </FormControl>
             <FormControl fullWidth>
@@ -100,7 +98,7 @@ function ChartCheckingAccount({
                     setRandomData()
                   }
                 }
-                >{dateDropdownItems.map(item => <MenuItem value={item}>{item}</MenuItem>)}
+                >{dateDropdownItems.map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
                 </Select>
             </FormControl>
           </Box>

@@ -21,7 +21,7 @@ function ChartTotalCashFlow({
 
         const svg = d3.select(".total-cash-flow-card-body svg").append('svg').attr('width', svgWidth).attr('height', svgHeight);
 
-        const graphArea = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
+        const graphArea = svg.append('g').attr('transform', `translate(0, 0)`);
 
         const x = d3.scaleBand()
         .rangeRound([0, width])
