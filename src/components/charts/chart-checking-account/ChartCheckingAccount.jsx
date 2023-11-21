@@ -9,7 +9,7 @@ import { extent } from 'd3-array';
 
 import {MenuItem, Select, FormControl, Box, Typography, Stack} from '@mui/material';
 
-const manageDropdownItems = ["Manage", "Manage", "Manage"];
+const manageDropdownItems = ["Manage", "Manage Two", "Manage Three"];
 const dateDropdownItems = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Novembar", "Decembar"];
 
 function ChartCheckingAccount({
