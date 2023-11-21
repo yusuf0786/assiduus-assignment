@@ -48,7 +48,6 @@ function ChartCheckingAccount({
   .y(d => yScale(d.yvalue))
   .curve(d3.curveBasis);
 
-  
   const setRandomData = () => {
     setChartData(prevState => randomData(prevState))
   }
@@ -103,7 +102,7 @@ function ChartCheckingAccount({
             </FormControl>
           </Box>
       </Stack>
-      <Box className="card-body" sx={{padding:"1rem"}}>
+      <Box className="card-body cheking-account-card-body" sx={{padding:"1rem"}}>
         <svg
           className="lineChartSvg"
           width={svgWidth}

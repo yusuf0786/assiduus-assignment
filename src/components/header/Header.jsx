@@ -1,7 +1,7 @@
 import React, { useImperativeHandle } from 'react'
 import { Link, NavLink } from "react-router-dom"
 import { useState, useRef, useEffect, useId } from 'react'
-import { ListItemText, ListItemIcon, ListItemButton, ListItem, List, Drawer, InputBase, Container, Toolbar, Tooltip, AppBar, Button, IconButton, Badge, ClickAwayListener, Menu, MenuItem, Avatar, Box, Typography } from "@mui/material";
+import { ListItemText, ListItemIcon, ListItemButton, ListItem, List, Drawer, InputBase, Container, Toolbar, Tooltip, AppBar, Button, IconButton, Badge, ClickAwayListener, Menu, MenuItem, Avatar, Box, Typography, Collapse  } from "@mui/material";
 
 import logo from "../../assets/img/logo.png"
 import avatarImg from "../../assets/img/myimg.png"
@@ -75,18 +75,41 @@ const drawerItemsDetails = [
     {text: "Contacts", path: "/contacts", icon: <ContactsIcon />},
 ]
 
+const drawerStyle = {
+    width: drawerWidth,
+    flexShrink: 0,
+    boxShadow: 0,
+    [`& .MuiDrawer-paper`]: { 
+        width: drawerWidth, 
+        boxSizing: 'border-box',
+        transform: "translate(0%, 0%) !important",
+        transitionProperty: "transform",
+        transitionDuration: "0.5s",
+        "@media only screen and (max-width:900px)": {
+            ...(!open && { 
+                transform: "translate(100%, 0%) !important",
+            }),
+        },
+    },
+    ".MuiPaper-root": {
+        border: 0,
+    },
+}
+
 function Header(props, ref) {
 
     const randomBtnItemId = useId()
     const searchItemId = useId()
     const actionItemId = useId()
     const userMenuItemId = useId()
+    const userMenuListId = useId()
 
     const [open, setOpen] = useState(true)
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [openCollapse, setOpenCollapse] = useState(false);
   
     const handleOpenNavMenu = (event) => {
         setOpen(true)
@@ -98,9 +121,11 @@ function Header(props, ref) {
     const handleCloseNavMenu = () => {
         setOpen(false)
     };
-  
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
+    };
+    const handleCollapseMenu = () => {
+        setOpenCollapse(!openCollapse);
     };
 
     useEffect(() => {
@@ -187,28 +212,7 @@ function Header(props, ref) {
                 </Container>
                 {/* Drawer AKA sidebar */}
                 <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleCloseNavMenu}>
-                    <Drawer open={open} variant={ windowWidth <= 900 ? "temporary" : "permanent"} onClose={() => setOpen(false)} anchor={windowWidth > 900 ? "left" : "right"}
-                        sx={{
-                            width: drawerWidth,
-                            flexShrink: 0,
-                            boxShadow: 0,
-                            [`& .MuiDrawer-paper`]: { 
-                                width: drawerWidth, 
-                                boxSizing: 'border-box',
-                                transform: "translate(0%, 0%) !important",
-                                transitionProperty: "transform",
-                                transitionDuration: "0.5s",
-                                "@media only screen and (max-width:900px)": {
-                                    ...(!open && { 
-                                        transform: "translate(100%, 0%) !important",
-                                    }),
-                                },
-                            },
-                            ".MuiPaper-root": {
-                                border: 0,
-                            },
-                        }}
-                    >
+                    <Drawer open={open} variant={ windowWidth <= 900 ? "temporary" : "permanent"} onClose={() => setOpen(false)} anchor={windowWidth > 900 ? "left" : "right"} sx={drawerStyle}>
                         <Toolbar>
                             <Box className="logo" display={{xs: "none", md: "block"}}>
                                 <img src={logo} alt="Logo" />
@@ -241,35 +245,27 @@ function Header(props, ref) {
                                         </ListItemButton>
                                 </ListItem>
                                 <ListItem key={userMenuItemId} disablePadding>
-                                        <ListItemButton sx={{padding: "8px 1.75rem"}} >
-                                            <Tooltip title="Open settings">
-                                                <IconButton disableRipple onClick={handleOpenUserMenu} sx={{ p: 0, width: "100%" }}>
-                                                    <Avatar src={avatarImg} alt="Avatar Image" sx={{marginRight:"1rem"}}/>
-                                                    <ListItemText sx={{textAlign:"left"}} primary="User Settings" />
-                                                    <ArrowDropDownIcon/>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
-                                                anchorOrigin={{
-                                                    vertical: 'top',
-                                                    horizontal: 'right',
-                                                }}
-                                                keepMounted
-                                                transformOrigin={{
-                                                    vertical: 'top',
-                                                    horizontal: 'right',
-                                                }}
-                                                open={Boolean(anchorElUser)}
-                                                onClose={handleCloseUserMenu}
-                                            >
-                                            {settings.map((setting) => (
-                                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                                        <Typography textAlign="center">{setting}</Typography>
-                                                </MenuItem>
-                                            ))}
-                                            </Menu>
-                                        </ListItemButton>
+                                    <ListItemButton sx={{padding: "8px 1.75rem"}} >
+                                        <ListItemIcon>
+                                            <IconButton disableRipple onClick={handleCollapseMenu} sx={{ p: 0, width: "100%" }}>
+                                                <Avatar src={avatarImg} alt="Avatar Image" sx={{marginRight:"1rem"}}/>
+                                                <ListItemText sx={{textAlign:"left"}} primary="User Settings" />
+                                                <ArrowDropDownIcon/>
+                                            </IconButton>
+                                        </ListItemIcon>
+                                    </ListItemButton>
                                 </ListItem>
+                                <Collapse in={openCollapse} onClose={handleCollapseMenu} timeout="auto" unmountOnExit  sx={{display: {xs:"block", md:"none"}, }}>
+                                    <List component="div">
+                                        {settings.map((setting, index) => (
+                                            <ListItem key={userMenuListId + index} disablePadding>
+                                                <ListItemButton sx={{padding: "8px 1.75rem"}}>
+                                                    <ListItemText primary={setting} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Collapse>
                             </List>
                             <List sx={{padding: {xs: 0, md: "2.38rem 0 0 0"}, }}>
                                 {drawerItemsDetails.map((itemDetail, index) => (
