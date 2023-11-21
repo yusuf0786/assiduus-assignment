@@ -36,7 +36,7 @@ export const theme = createTheme({
       MuiFormControl: {
         styleOverrides: {
           root: {
-            minWidth: "125px",
+            minWidth: "fit-content",
           },
         },
       },
@@ -71,6 +71,7 @@ export const theme = createTheme({
             color: "inherit",
             border:0,
             fontWeight: 700,
+            padding: "10px 1rem",
           }
         }
       },

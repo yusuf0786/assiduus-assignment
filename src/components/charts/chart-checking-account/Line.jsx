@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { select, selectAll } from 'd3-selection';
 import { transition } from 'd3-transition';
 
 export function Line({xScale, yScale, data, lineGenerator}) {
-
-  // const initialData = data.map(d => ({
-  //   name: d.yvalue,
-  //   value: 0
-  // }));
 
   function updateChart() {
     const t = transition().duration(1000);
@@ -27,12 +22,12 @@ export function Line({xScale, yScale, data, lineGenerator}) {
       .data(data)
       .attr('id', 'line')
       .attr('stroke', 'green')
-      .attr('stroke-width', 5)
+      .attr('stroke-width', 3)
       .attr('fill', 'none')
       .attr('d', lineGenerator);
 
       updateChart()
   })
 
-  return <g className="line-group" />;
+  return <g className="line-group"  />;
 }

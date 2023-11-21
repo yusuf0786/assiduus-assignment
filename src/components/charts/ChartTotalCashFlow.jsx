@@ -1,38 +1,38 @@
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useImperativeHandle } from "react";
 
 import { Box, Stack, Typography } from "@mui/material";
 
-export function ChartTotalCashFlow({
+function ChartTotalCashFlow({
     data,
     keys,
-    svgWidth = 350,
-    svgHeight = 331.5,
+    svgWidth,
+    svgHeight = 284 + 47,
     margin = {
         top: 20, right: 20, bottom: 40, left: 45
     },
-    width = svgWidth - margin.left - margin.right,
-    height = svgHeight - margin.top - margin.bottom,
-}){
+    width = svgWidth,
+    height = svgHeight - 20 - 20,
+}, ref){
 
-    const ref =  useRef(null)
+    const svgElementRef =  useRef(null)
 
-    useEffect(() => {
-      
-        const svg = d3.select(ref.current).append('svg').attr('width', svgWidth).attr('height', svgHeight);
-        
+    const [chartData, setChartData] = useState(data)
+
+        const svg = d3.select(".total-cash-flow-card-body svg").append('svg').attr('width', svgWidth).attr('height', svgHeight);
+
         const graphArea = svg.append('g').attr('transform', `translate(${margin.left}, ${margin.top})`);
-        
+
         const x = d3.scaleBand()
         .rangeRound([0, width])
-        .domain(data.map(d => d.name))
-        .padding(0.7);
+        .domain(chartData.map(d => d.name))
+        .padding(0.8);
         
         const y = d3.scaleLinear()
         .range([height, 0])
         .domain([
-            d3.min(data, d => d.value) - 5,
-            d3.max(data, d => d.value) + 5
+            d3.min(chartData, d => d.value) - 5,
+            d3.max(chartData, d => d.value) + 5
         ]).nice();
         
         const xAxis = d3.axisBottom(x);
@@ -47,8 +47,8 @@ export function ChartTotalCashFlow({
 
         const color = d3.scaleOrdinal().domain(keys).range(["rgba(71, 183, 71, 1)", "rgba(2, 187, 125, 1)"])
 
-        const stackedData = d3.stack().keys(keys)(data)
-        
+        const stackedData = d3.stack().keys(keys)(chartData)
+
         graphArea
             .append("g")
             .selectAll("g")
@@ -67,11 +67,48 @@ export function ChartTotalCashFlow({
                 v${height - y(d.data.value) - ry}
                 h${-(x.bandwidth())}Z
             `)
-                .attr("x", d => x(d.data.name))
-                .attr("y", d => y(d[1]))
-                .attr("height", d => y(d[0]) - y(d[1]))
-                .attr("width",x.bandwidth())
-    })
+            .attr("x", d => x(d.data.name))
+            .attr("y", d => y(d[1]))
+            .attr("height", d => y(d[0]) - y(d[1]))
+            .attr("width",x.bandwidth())
+
+        const updateChart = () => {
+
+            setChartData( currentValue => {
+                return currentValue.map( d => {
+                    return {
+                        name: d.name,
+                        value: Math.round(Math.random() * (3 - 7.5 + 1)) + 7.5,
+                        value2: Math.round(Math.random() * (3 - 7.5 + 1)) + 7.5,
+                    }
+                })
+            })
+
+            var path = graphArea.selectAll("rect").data(stackedData)
+                path.exit().remove()
+                path.enter()
+                    .data(stackedData)
+                    .join("rect")
+                    .attr("fill", d => color(d.key))
+                    .attr("rect", d => `
+                            M${x(d.name)},${y(d.value) + ry}
+                            a${rx},${ry} 0 0 1 ${rx},${-ry}
+                            h${x.bandwidth() - 2 * rx}
+                            a${rx},${ry} 0 0 1 ${rx},${ry}
+                            v${height - y(d.value) - ry}
+                            h${-(x.bandwidth())}Z
+                        `)
+                        .attr("x", d => x(d.name))
+                        .attr("y", d => y(d[1]))
+                        .attr("height", d => y(d[0]) - y(d[1]))
+                        .attr("width",x.bandwidth())
+        }
+
+        useImperativeHandle(ref, () => {
+            return {
+                updateFunctionRef: updateChart,
+            }
+        }, [chartData])
   
     return (
         <>
@@ -88,10 +125,10 @@ export function ChartTotalCashFlow({
                 </Box>
             </Box>
         </Stack>
-        <Box className="card-body" sx={{padding:"1rem"}}>
+        <Box className="card-body total-cash-flow-card-body" sx={{padding:"1rem"}}>
             <svg
-                ref={ref}
-                width="inherit"
+                ref={svgElementRef}
+                width={svgWidth}
                 height={svgHeight}
                 viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             ></svg>
@@ -100,3 +137,6 @@ export function ChartTotalCashFlow({
     )
 
 }
+
+
+export default React.forwardRef(ChartTotalCashFlow);

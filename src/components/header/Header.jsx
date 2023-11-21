@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useImperativeHandle } from 'react'
 import { Link, NavLink } from "react-router-dom"
 import { useState, useRef, useEffect, useId } from 'react'
-import { ListItemText, ListItemIcon, ListItemButton, ListItem, List, Drawer, InputBase, Container, Toolbar, Tooltip, AppBar, IconButton, Badge, ClickAwayListener, Menu, MenuItem, Avatar, Box, Typography } from "@mui/material";
+import { ListItemText, ListItemIcon, ListItemButton, ListItem, List, Drawer, InputBase, Container, Toolbar, Tooltip, AppBar, Button, IconButton, Badge, ClickAwayListener, Menu, MenuItem, Avatar, Box, Typography } from "@mui/material";
+
 import logo from "../../assets/img/logo.png"
 import avatarImg from "../../assets/img/myimg.png"
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,12 +19,10 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import PersonIcon from '@mui/icons-material/Person';
 import ContactsIcon from '@mui/icons-material/Contacts';
 
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 const drawerWidth = 240;
 
-const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Logout'];
 
 const Search = styled('div')(({ theme }) => ({
@@ -67,15 +66,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-}));
-
 const drawerItemsDetails = [
     {text: "Dashboard", path: "/", icon: <DashboardIcon />},
     {text: "Accounts", path: "/accounts", icon: <AccountBalanceWalletIcon />},
@@ -85,8 +75,9 @@ const drawerItemsDetails = [
     {text: "Contacts", path: "/contacts", icon: <ContactsIcon />},
 ]
 
-export function Header() {
+function Header(props, ref) {
 
+    const randomBtnItemId = useId()
     const searchItemId = useId()
     const actionItemId = useId()
     const userMenuItemId = useId()
@@ -125,11 +116,15 @@ export function Header() {
 
     return (
         <>
+            {/* header Starts */}
             <AppBar position='static' sx={{backgroundColor: "#fff", boxShadow: 1, zIndex: 1}}>
                 <Container maxWidth="100%">
                     <Toolbar disableGutters sx={{display:"flex", justifyContent:"flex-end",}}>
 
                         <Box display={{xs: "none", md:"flex"}} alignItems="center">
+
+                            <Button variant="outlined" onClick={props.chartDataupdateFunction} sx={{marginRight:"1rem", display: {xs: "none", md:"block"}}}>Random Data</Button>
+                            
                             <Search sx={{margin:"0 !important"}}>
                                 <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
                                 <StyledInputBase
@@ -190,11 +185,9 @@ export function Header() {
                         </Box>
                     </Toolbar>
                 </Container>
+                {/* Drawer AKA sidebar */}
                 <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleCloseNavMenu}>
-                    <Drawer
-                        open={open}
-                        variant="permanent"
-                        anchor={windowWidth > 900 ? "left" : "right"}
+                    <Drawer open={open} variant="permanent" anchor={windowWidth > 900 ? "left" : "right"}
                         sx={{
                             width: drawerWidth,
                             flexShrink: 0,
@@ -221,19 +214,16 @@ export function Header() {
                                 <img src={logo} alt="Logo" />
                             </Box>
                             <Box className="close-btn" display={{xs: "block", md: "none"}}>
-                                <IconButton
-                                    color="#000"
-                                    aria-label="close drawer"
-                                    edge="end"
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ ...(!open && { display: 'none' }) }}
-                                >
+                                <IconButton color="#000" aria-label="close drawer" edge="end" onClick={handleCloseNavMenu} sx={{ ...(!open && { display: 'none' }) }} >
                                     <CloseIcon />
                                 </IconButton>
                             </Box>
                         </Toolbar>
                         <Box sx={{ overflow: 'auto' }}>
                             <List sx={{display: {xs:"block", md:"none"}, }}>
+                                <ListItem key={randomBtnItemId} disablePadding sx={{padding: "8px 1.75rem"}}>
+                                    <Button variant="outlined" fullWidth onClick={props.chartDataupdateFunction} sx={{display: {xs: "block", md:"none"}}}>Random Data</Button>
+                                </ListItem>
                                 <ListItem key={searchItemId} disablePadding sx={{padding: "8px 1.75rem"}}>
                                     <Search sx={{margin:"0 !important", width:"100% !important"}}>
                                         <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
@@ -259,10 +249,7 @@ export function Header() {
                                                     <ArrowDropDownIcon/>
                                                 </IconButton>
                                             </Tooltip>
-                                            <Menu
-                                                sx={{ mt: '45px' }}
-                                                id="menu-appbar"
-                                                anchorEl={anchorElUser}
+                                            <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
                                                 anchorOrigin={{
                                                     vertical: 'top',
                                                     horizontal: 'right',
@@ -284,7 +271,7 @@ export function Header() {
                                         </ListItemButton>
                                 </ListItem>
                             </List>
-                            <List sx={{padding: {xs: 0, md: "1.25rem 0 0 0"}, }}>
+                            <List sx={{padding: {xs: 0, md: "2.38rem 0 0 0"}, }}>
                                 {drawerItemsDetails.map((itemDetail, index) => (
                                 <ListItem key={itemDetail.text} disablePadding>
                                     <NavLink to={itemDetail.path} className="drawer-nav-link">
@@ -330,63 +317,4 @@ const blue = {
 700: '#0066CC',
 };
 
-const PopupBody = styled('div')(
-    ({ theme }) => `
-    width: max-content;
-    padding: 12px 16px;
-    margin: 8px;
-    border-radius: 8px;
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#FFF'};
-    box-shadow: ${
-        theme.palette.mode === 'dark'
-        ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-        : `0px 4px 8px rgb(0 0 0 / 0.1)`
-    };
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.875rem;
-    z-index: 1;
-    `,
-);
-
-const customButton = styled('button')(
-    ({ theme }) => `
-    font-family: IBM Plex Sans, sans-serif;
-    font-weight: 600;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    background-color: ${blue[500]};
-    padding: 8px 16px;
-    border-radius: 8px;
-    color: white;
-    transition: all 150ms ease;
-    cursor: pointer;
-    border: 1px solid ${blue[500]};
-    box-shadow: 0 2px 1px ${
-        theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.5)' : 'rgba(45, 45, 60, 0.2)'
-    }, inset 0 1.5px 1px ${blue[400]}, inset 0 -2px 1px ${blue[600]};
-
-    &:hover {
-        background-color: ${blue[600]};
-    }
-
-    &:active {
-        background-color: ${blue[700]};
-        box-shadow: none;
-    }
-
-    &:focus-visible {
-        box-shadow: 0 0 0 4px ${theme.palette.mode === 'dark' ? blue[300] : blue[200]};
-        outline: none;
-    }
-
-    &.disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        box-shadow: none;
-        &:hover {
-        background-color: ${blue[500]};
-        }
-    }
-    `,
-);
+export default React.forwardRef(Header);

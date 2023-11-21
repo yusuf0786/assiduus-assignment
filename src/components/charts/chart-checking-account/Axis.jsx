@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { select, selectAll } from "d3-selection";
 import { axisBottom, axisLeft } from "d3-axis";
-import { transition } from 'd3-transition';
 
 export function Axis({scale, orient, transform, ticks}) {
   function renderAxis() {
@@ -17,7 +16,6 @@ export function Axis({scale, orient, transform, ticks}) {
   }
 
   function updateAxis() {
-    const t = transition().duration(1000)
 
     if (orient === "left") {
       const axis = axisLeft(scale).ticks(ticks); 

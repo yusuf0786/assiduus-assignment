@@ -1,29 +1,27 @@
+import React, { useImperativeHandle } from "react";
 import * as d3 from "d3";
-import {useRef, useEffect, useId, useState} from "react";
-import { render } from "react-dom";
+import {useRef, useEffect, useState} from "react";
 
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { XYAxis } from './xy-axis';
 import { Line } from './Line';
-import { line } from 'd3-shape';
 import { extent } from 'd3-array';
-import { transition } from 'd3-transition';
 
-import {MenuItem, Select, FormControl, CardContent, CardActions, Card, InputLabel} from '@mui/material';
+import {MenuItem, Select, FormControl, Box, Typography, Stack} from '@mui/material';
 
-import {Box, Button, Typography, Stack, Grid} from '@mui/material';
+const dateDropdownItems = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "Novembar", "Decembar"]
 
-export function ChartCheckingAccount({
+function ChartCheckingAccount({
   data,
   svgWidth = 0,
-  svgHeight = 326.5,
+  svgHeight = 284,
   margins = {
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
   },
-}) {
+}, ref) {
 
   const [accountManage, setAccountManage] = useState("Manage");
   const [accountDate, setAccountDate] = useState("January");
@@ -34,7 +32,6 @@ export function ChartCheckingAccount({
   const height = svgHeight - margins.top - margins.bottom;
 
   const ticks = 5;
-  const t = transition().duration(1000);
 
   const xScale = scaleBand()
   .domain(chartData.map(d => d.y))
@@ -49,16 +46,25 @@ export function ChartCheckingAccount({
   .x(d => xScale(d.y))
   .y(d => yScale(d.yvalue))
   .curve(d3.curveBasis);
-  
 
-  const randomData = (e) => {
-    // e.preventDefault();
-    return chartData.map(d => ({
-      x: d.x,
-      y: d.y,
-      yvalue: Math.floor((Math.random() * 400) + 100),
+  
+  const setRandomData = () => {
+    setChartData(prevState => randomData(prevState))
+  }
+
+  const randomData = (prevState) => {
+    return prevState.map(d => ({
+      'x': d.x,
+      'y': d.y,
+      'yvalue': (Math.random() * (2.5 - 0.8 + 0.1) + 0.8).toFixed(1)
     }))
   }
+
+  useImperativeHandle(ref, () => {
+    return {
+      updateFunctionRef: setRandomData
+    }
+  })
 
   return (
     <>
@@ -74,13 +80,7 @@ export function ChartCheckingAccount({
               // label="Manage"
               onChange={e => {
                   setAccountManage(e.target.value)
-                  setChartData(
-                      e.target.value === "Manage" ? 
-                        randomData()
-                      : e.target.value === "Value two" ? 
-                        randomData()
-                      : randomData()
-                  )
+                  setRandomData()
               }}
               >
                   <MenuItem value={"Manage"}>Manage</MenuItem>
@@ -95,21 +95,12 @@ export function ChartCheckingAccount({
                 id="account-date-select"
                 value={accountDate}
                 // label="January"
-                onChange={
-                  e => {
+                onChange={e => {
                     setAccountDate(e.target.value)
-                    setChartData(
-                      e.target.value === "January" ? 
-                        randomData()
-                      : e.target.value === "February" ? 
-                        randomData()
-                      : randomData()
-                    )}
+                    setRandomData()
+                  }
                 }
-                >
-                    <MenuItem value={"January"}>January</MenuItem>
-                    <MenuItem value={"February"}>February</MenuItem>
-                    <MenuItem value={"March"}>March</MenuItem>
+                >{dateDropdownItems.map(item => <MenuItem value={item}>{item}</MenuItem>)}
                 </Select>
             </FormControl>
           </Box>
@@ -117,11 +108,11 @@ export function ChartCheckingAccount({
       <Box className="card-body" sx={{padding:"1rem"}}>
         <svg
           className="lineChartSvg"
-          width="inherit"
+          width={svgWidth}
           height={height + margins.top + margins.bottom}
         >
           <g transform={`translate(${margins.left}, ${margins.top})`}>
-            <XYAxis {...{ xScale, yScale, height, ticks, t }} />
+            <XYAxis {...{ xScale, yScale, height, ticks }} />
             <Line data={data} xScale={xScale} yScale={yScale} lineGenerator={lineGenerator} width={width} height={height} />
           </g>
         </svg>
@@ -129,3 +120,5 @@ export function ChartCheckingAccount({
     </>
   );
 }
+
+export default React.forwardRef(ChartCheckingAccount);
