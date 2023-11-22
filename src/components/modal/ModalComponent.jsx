@@ -2,18 +2,27 @@ import * as React from 'react';
 import { useState } from 'react';
 import {Box, Button, Typography, Modal, styled} from '@mui/material';
 
-const modalBodyStyle = {
+const modalStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: "100%",
+  height: "100%",
   maxWidth: "500px",
   margin:"0 8px",
   bgcolor: 'background.paper',
   border: '1px solid #ccc',
   boxShadow: 1,
-  p: 2,
+  p: 0,
+
+  display: "flex",
+  flexDirection: "column",
+  flexWarp: "nowrap",
+
+  // important for modal body scroll
+  maxHeight: "100%",
+  overflow: "hidden",
 };
 
 const VisuallyHiddenInput = styled('input')({
@@ -28,6 +37,28 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+const modalHeaderStyle = {
+  padding: "20px",
+}
+const modalBodyStyle = {
+  padding: "10px 20px",
+  overflowY: "auto",
+}
+const modalFooterStyle = {
+  marginTop: "auto",
+  padding: "20px",
+}
+
+/*
+{
+  btn: {
+    btnVariant= "outlined",
+    disableElevation= true,
+    value= "New Sales Invoice",
+  },
+  modalBodyMaxHeight: 260,
+}
+*/
 export function ModalComponent() {
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -68,22 +99,29 @@ export function ModalComponent() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={modalBodyStyle}>
-          <Typography id="modal-modal-title" variant="h4" component="h3" fontWeight={700} sx={{ mb:1 }}>
-            Upload a File
-          </Typography>
-          <Typography id="modal-modal-description">
-            { selectedFile ? "File Selected" : "Choose a file"}
-          </Typography>
-          {selectedFile ? <Typography variant='body1' marginRight="1rem" sx={{ mb:1 }}>{selectedFileName}</Typography>
-          :<Button component="label" variant="contained" sx={{ marginRight:"1rem" }}> Upload file <VisuallyHiddenInput onChange={(e) => handleFileChange(e)} type="file" />
-            </Button>}
-          <Button variant="contained" onClick={handleClose} sx={{ marginRight:"1rem" }}>
-            Cancel
-          </Button>
-          {selectedFile && (
-            <Button variant="contained" onClick={handleSubmit} disabled> Submit </Button>
-          )}
+        <Box sx={{...modalStyle, maxHeight:260}}>
+          <Box sx={modalHeaderStyle}>
+            <Typography id="modal-modal-title" variant="h4" component="h3" fontWeight={700} sx={{ mb:1 }}>
+              Upload a File
+            </Typography>
+          </Box>
+          <Box sx={modalBodyStyle}>
+            <Typography id="modal-modal-description">
+              { selectedFile ? "File Selected" : "Choose a file"}
+            </Typography>
+          </Box>
+          <Box sx={modalFooterStyle}>
+            {selectedFile ? <Typography variant='body1' marginRight="1rem" sx={{ mb:1 }}>{selectedFileName}</Typography>
+            :<Button component="label" variant="contained" sx={{ marginRight:"1rem" }}>
+              Upload file <VisuallyHiddenInput onChange={(e) => handleFileChange(e)} type="file" />
+              </Button>}
+            <Button variant="contained" onClick={handleClose} sx={{ marginRight:"1rem" }}>
+              Cancel
+            </Button>
+            {selectedFile && (
+              <Button variant="contained" onClick={handleSubmit} disabled> Submit </Button>
+            )}
+          </Box>
         </Box>
       </Modal>
     </div>

@@ -129,14 +129,17 @@ function Header(props, ref) {
     };
 
     useEffect(() => {
-        window.addEventListener("resize", () => {
+        function resizeHandler() {
             setWindowWidth(window.innerWidth)
+            if(windowWidth <= 900) { setOpen(false) }
+        }
+        window.addEventListener("resize", resizeHandler)
 
-            if(windowWidth <= 900) {
-                setOpen(false)
-            }
-        })
         setOpen(windowWidth <= 900 ? false : true)
+
+        return () => {
+            window.removeEventListener("resize", resizeHandler)
+        }
     }, []) // empty dependancy array runs it once after react rendered
 
     return (
@@ -226,7 +229,14 @@ function Header(props, ref) {
                         <Box sx={{ overflow: 'auto' }}>
                             <List sx={{display: {xs:"block", md:"none"}, }}>
                                 <ListItem key={randomBtnItemId} disablePadding sx={{padding: "8px 1.75rem"}}>
-                                    <Button variant="outlined" fullWidth onClick={props.chartDataupdateFunction} sx={{display: {xs: "block", md:"none"}}}>Random Data</Button>
+                                    <Button 
+                                        variant="outlined" 
+                                        fullWidth 
+                                        onClick={ () => {
+                                            props.chartDataupdateFunction()
+                                            handleCloseNavMenu()
+                                        }} 
+                                        sx={{display: {xs: "block", md:"none"}}}>Random Data</Button>
                                 </ListItem>
                                 <ListItem key={searchItemId} disablePadding sx={{padding: "8px 1.75rem"}}>
                                     <Search sx={{margin:"0 !important", width:"100% !important"}}>
@@ -270,7 +280,7 @@ function Header(props, ref) {
                             <List sx={{padding: {xs: 0, md: "2.38rem 0 0 0"}, }}>
                                 {drawerItemsDetails.map((itemDetail, index) => (
                                 <ListItem key={itemDetail.text} disablePadding>
-                                    <NavLink to={itemDetail.path} className="drawer-nav-link">
+                                    <NavLink to={itemDetail.path} onClick={ windowWidth <= 900 ? handleCloseNavMenu : null } className="drawer-nav-link">
                                         <ListItemButton sx={{padding: "8px 1.75rem"}} >
                                             <ListItemIcon>
                                                 {itemDetail.icon}

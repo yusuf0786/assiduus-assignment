@@ -23,9 +23,9 @@ function ChartInvoiceOwed({
 
   const [chartData, setChartData] = useState(data)
 
-    const svg = d3.select(".chart-invoice-owed-card-body svg").append('svg').attr('width', svgWidth).attr('height', svgHeight);
+    const svg = d3.select(".chart-invoice-owed-card-body svg").attr('width', svgWidth).attr('height', svgHeight);
 
-    const graphArea = svg.append('g').attr('transform', `translate(${margin.left - margin.left}, ${30})`);
+    const graphArea = svg.append('g').attr('transform', `translate(${margin.left - margin.left}, ${30})`).attr('class', 'y-axis-line');
 
     const x = d3.scaleBand().rangeRound([0, width]).domain(chartData.map(d => d.name)).padding(0.8);
 
@@ -39,7 +39,7 @@ function ChartInvoiceOwed({
     const xAxis = d3.axisBottom(x);
     const yAxis = d3.axisLeft(y).ticks(5);
 
-    graphArea.append('g').attr('class', 'axis').attr('transform', `translate(0, ${height})`).call(xAxis);
+    graphArea.append('g').attr('class', 'axis').attr('transform', `translate(0, ${height})`).call(xAxis).attr('class', 'x-axis-line');
 
     // graphArea.append('g').attr('class', 'axis').call(yAxis);
 
@@ -50,7 +50,7 @@ function ChartInvoiceOwed({
     .selectAll("bar")
     .data(chartData)
     .enter()
-    .append("path")
+    .append("path").attr('class', 'path')
     .style("fill", "rgba(71, 183, 71, 1)") 
     .attr("d", item => `
         M${x(item.name)},${y(item.value) + ry}
@@ -70,20 +70,15 @@ function ChartInvoiceOwed({
       }))
     })
 
-    var path = graphArea.selectAll("path")
-            .data(chartData)
-        path.exit().remove()
-        path.enter()
-            .append("path")
-            .style("fill", "rgba(71, 183, 71, 1)")
-            .attr("d", item => `
-                M${x(item.name)},${y(item.value) + ry}
-                a${rx},${ry} 0 0 1 ${rx},${-ry}
-                h${x.bandwidth() - 2 * rx}
-                a${rx},${ry} 0 0 1 ${rx},${ry}
-                v${height - y(item.value) - ry}
-                h${-(x.bandwidth())}Z
-            `);
+    var yAxizLine = graphArea.select(".y-axis-line")
+    yAxizLine.remove()
+
+    var xAxizLine = graphArea.select(".x-axis-line")
+    xAxizLine.remove()
+
+    var path = graphArea.selectAll(".path")
+    path.remove()
+
   }
 
   useImperativeHandle(ref, () => {

@@ -32,12 +32,12 @@ const invoiceOwedData = [
 ]
 
 const totalCashFlowData = [
-    { name: "Older", value: 5, value2: 5},
-    { name: "Jan 1", value: 6, value2: 2 },
-    { name: "Jan 2", value: 7, value2: 3 },
-    { name: "Jan 3", value: 6.5, value2: 1},
-    { name: "Jan 4", value: 6, value2: 3},
-    { name: "Future", value: 6, value2: 6}
+    { name: "Older", "value": 5, "value2": 5},
+    { name: "Jan 1", "value": 6, "value2": 2 },
+    { name: "Jan 2", "value": 7, "value2": 3 },
+    { name: "Jan 3", "value": 6.5, "value2": 1},
+    { name: "Jan 4", "value": 6, "value2": 3},
+    { name: "Future", "value": 6, "value2": 6}
 ]
 
 const totalCashFlowDataKeys = [

@@ -19,41 +19,45 @@ function ChartTotalCashFlow({
 
     const [chartData, setChartData] = useState(data)
 
-        const svg = d3.select(".total-cash-flow-card-body svg").append('svg').attr('width', svgWidth).attr('height', svgHeight);
+    const svg = d3.select(".total-cash-flow-card-body svg")
+    const graphArea = svg
 
-        const graphArea = svg.append('g').attr('transform', `translate(0, 0)`);
+    const color = d3.scaleOrdinal().domain(keys).range(["rgba(71, 183, 71, 1)", "rgba(2, 187, 125, 1)"])
 
-        const x = d3.scaleBand()
-        .rangeRound([0, width])
-        .domain(chartData.map(d => d.name))
-        .padding(0.8);
+    const stackedData = d3.stack().keys(keys)(chartData)
+
+    const x = d3.scaleBand()
+    .rangeRound([0, width])
+    .domain(chartData.map(d => d.name))
+    .padding(0.8);
         
-        const y = d3.scaleLinear()
-        .range([height, 0])
-        .domain([
-            d3.min(chartData, d => d.value) - 5,
-            d3.max(chartData, d => d.value) + 5
-        ]).nice();
+    const y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([
+        d3.min(chartData, d => d.value) - 5,
+        d3.max(chartData, d => d.value) + 5
+    ]).nice();
+
+    const rx = 8;
+    const ry = 8;
         
-        const xAxis = d3.axisBottom(x);
-        const yAxis = d3.axisLeft(y).ticks(5);
+    const xAxis = d3.axisBottom(x);
+    const yAxis = d3.axisLeft(y).ticks(5);
+    
+    useEffect( function() {
+        svg.attr('width', svgWidth).attr('height', svgHeight);
+        graphArea.append('g').attr('transform', `translate(0, 0)`).attr('class', "xyz");
         
-        graphArea.append('g').attr('class', 'axis').attr('transform', `translate(0, ${height})`).call(xAxis);
+        graphArea.append('g').attr('class', 'axis x-axis').attr('transform', `translate(0, ${height})`).call(xAxis);
         
         // graphArea.append('g').attr('class', 'axis').call(yAxis);
-        
-        const rx = 8;
-        const ry = 8;
-
-        const color = d3.scaleOrdinal().domain(keys).range(["rgba(71, 183, 71, 1)", "rgba(2, 187, 125, 1)"])
-
-        const stackedData = d3.stack().keys(keys)(chartData)
 
         graphArea
-            .append("g")
+            .append("g").attr('class', "rects")
             .selectAll("g")
             .data(stackedData)
             .join("g")
+            .attr('class', (d, i) =>  `rectCont${i+1}`)
             .attr("fill", d => color(d.key))
             .selectAll("rect")
             // enter a second time = loop subgroup per subgroup to add all rectangles
@@ -71,47 +75,57 @@ function ChartTotalCashFlow({
             .attr("y", d => y(d[1]))
             .attr("height", d => y(d[0]) - y(d[1]))
             .attr("width",x.bandwidth())
+    })
 
-        const updateChart = () => {
+    const updateChart = () => {
 
-            setChartData( currentValue => {
-                return currentValue.map( d => {
-                    return {
-                        name: d.name,
-                        value: Math.round(Math.random() * (3 - 7.5 + 1)) + 7.5,
-                        value2: Math.round(Math.random() * (3 - 7.5 + 1)) + 7.5,
-                    }
-                })
+        setChartData( currentValue => {
+            return currentValue.map( d => {
+                return {
+                    name: d.name,
+                    value: Math.random() * (7 - 1 + 1) + 1,
+                    value2: Math.random() * (7 - 1 + 1) + 1,
+                }
             })
+        })
 
-            var path = graphArea.selectAll("rect").data(stackedData)
-                path.exit().remove()
-                path.enter()
-                    .data(stackedData)
-                    .join("rect")
-                    .attr("fill", d => color(d.key))
-                    .attr("rect", d => `
-                            M${x(d.name)},${y(d.value) + ry}
-                            a${rx},${ry} 0 0 1 ${rx},${-ry}
-                            h${x.bandwidth() - 2 * rx}
-                            a${rx},${ry} 0 0 1 ${rx},${ry}
-                            v${height - y(d.value) - ry}
-                            h${-(x.bandwidth())}Z
-                        `)
-                        .attr("x", d => x(d.name))
-                        .attr("y", d => y(d[1]))
-                        .attr("height", d => y(d[0]) - y(d[1]))
-                        .attr("width",x.bandwidth())
+        var xAxisElement = graphArea.selectAll('.x-axis')
+            xAxisElement.remove()
+
+        var elementRets = graphArea.selectAll('.rects')
+        elementRets.remove()
+
+        var xyz = graphArea.selectAll('.xyz')
+        xyz.remove()
+
+        // var path = graphArea.selectAll("rect")
+        //     path.exit().remove()
+        //     path.enter()
+        //         .data(d => stackedData)
+        //         .join("rect")
+        //         .attr("fill", d => color(d.key))
+        //         .attr("rect", d => `
+        //                 M${x(d.name)},${y(d.value) + ry}
+        //                 a${rx},${ry} 0 0 1 ${rx},${-ry}
+        //                 h${x.bandwidth() - 2 * rx}
+        //                 a${rx},${ry} 0 0 1 ${rx},${ry}
+        //                 v${height - y(d.value) - ry}
+        //                 h${-(x.bandwidth())}Z
+        //             `)
+        //             .attr("x", d => x(d.name))
+        //             .attr("y", d => y(d[1]))
+        //             .attr("height", d => y(d[0]) - y(d[1]))
+        //             .attr("width",x.bandwidth())
+    } // updatechart function ends 
+
+    useImperativeHandle(ref, () => {
+        return {
+            updateFunctionRef: updateChart,
         }
-
-        useImperativeHandle(ref, () => {
-            return {
-                updateFunctionRef: updateChart,
-            }
-        }, [chartData])
+    }, [chartData])
   
     return (
-        <>
+        <React.Fragment>
         <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow:1, padding:"1rem"}}>
             <Typography variant="h6" component="h3" fontWeight={700}>Total cash flow</Typography>
             <Box className="card-interaction" display="flex">
@@ -133,7 +147,7 @@ function ChartTotalCashFlow({
                 viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             ></svg>
         </Box>
-        </>
+        </React.Fragment>
     )
 
 }
