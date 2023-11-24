@@ -79,17 +79,18 @@ const drawerStyle = {
     width: drawerWidth,
     flexShrink: 0,
     boxShadow: 0,
-    [`& .MuiDrawer-paper`]: { 
+    [`& .MuiPaper-root`]: { 
         width: drawerWidth, 
         boxSizing: 'border-box',
-        transform: "translate(0%, 0%) !important",
+        // transform: "translate(0%, 0%) !important",
         transitionProperty: "transform",
         transitionDuration: "0.5s",
-        "@media only screen and (max-width:900px)": {
-            ...(!open && { 
-                transform: "translate(100%, 0%) !important",
-            }),
-        },
+        // "@media only screen and (max-width:900px)": {
+        //     transform: "translate(100%, 0%) !important",
+        //     ...(open && { 
+        //         transform: "translate(0%, 0%) !important",
+        //     }),
+        // },
     },
     ".MuiPaper-root": {
         border: 0,

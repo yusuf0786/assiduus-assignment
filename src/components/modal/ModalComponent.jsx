@@ -59,7 +59,26 @@ const modalFooterStyle = {
   modalBodyMaxHeight: 260,
 }
 */
-export function ModalComponent() {
+export function ModalComponent({
+  btn= {
+    variant,
+    disableElevation,
+    value,
+  },
+  btnUpload= {
+    text,
+  },
+  btnCancel= {
+    text,
+  },
+  btnSubmit= {
+    text,
+  },
+  modalBodyMaxHeight= 225,
+  head= {
+    text,
+  }
+}) {
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
@@ -91,35 +110,29 @@ export function ModalComponent() {
 
   return (
     <div>
-      {/* <Button onClick={handleOpen}>Open modal</Button> */}
-      <Button onClick={handleOpen} variant="outlined" disableElevation>New Sales Invoice</Button>
+      <Button onClick={handleOpen} variant={btn.variant} disableElevation={btn.disableElevation}>{btn.value}</Button>
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{...modalStyle, maxHeight:260}}>
+        <Box sx={{...modalStyle, maxHeight:modalBodyMaxHeight}}>
           <Box sx={modalHeaderStyle}>
-            <Typography id="modal-modal-title" variant="h4" component="h3" fontWeight={700} sx={{ mb:1 }}>
-              Upload a File
-            </Typography>
+            <Typography id="modal-modal-title" variant="h4" component="h3" fontWeight={700} sx={{ mb:1 }}>{head.text}</Typography>
           </Box>
           <Box sx={modalBodyStyle}>
             <Typography id="modal-modal-description">
-              { selectedFile ? "File Selected" : "Choose a file"}
+              { selectedFile ? `File Selected: ${selectedFileName}` : "Choose a file"}
             </Typography>
           </Box>
           <Box sx={modalFooterStyle}>
-            {selectedFile ? <Typography variant='body1' marginRight="1rem" sx={{ mb:1 }}>{selectedFileName}</Typography>
-            :<Button component="label" variant="contained" sx={{ marginRight:"1rem" }}>
-              Upload file <VisuallyHiddenInput onChange={(e) => handleFileChange(e)} type="file" />
-              </Button>}
-            <Button variant="contained" onClick={handleClose} sx={{ marginRight:"1rem" }}>
-              Cancel
-            </Button>
+            {!selectedFile && <Button component="label" variant="contained" sx={{ marginRight:"1rem" }}>
+              {btnUpload.text} <VisuallyHiddenInput onChange={(e) => handleFileChange(e)} type="file" />
+            </Button>}
+            <Button variant="contained" onClick={handleClose} sx={{ marginRight:"1rem" }}>{btnCancel.text}</Button>
             {selectedFile && (
-              <Button variant="contained" onClick={handleSubmit} disabled> Submit </Button>
+              <Button variant="contained" onClick={handleSubmit} disabled>{btnSubmit.text}</Button>
             )}
           </Box>
         </Box>

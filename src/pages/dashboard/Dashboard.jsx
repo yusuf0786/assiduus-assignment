@@ -56,7 +56,6 @@ function Dashboard(props, ref) {
 
     const [chartWidth, setChartWidth] = useState(0);
 
-    const [componentsShow, setComponentsShow] = useState({compoOne: true, compoTwo: true, compoThree: true, compoFour: true})
 
     const cardComponents = [
         {component: <ChartCheckingAccount ref={chartCheckingAccountRef} data={lineChartData} svgWidth={chartWidth} />},

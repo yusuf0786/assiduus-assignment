@@ -30,11 +30,11 @@ function ChartTotalCashFlow({
     .rangeRound([0, width])
     .domain(chartData.map(d => d.name))
     .padding(0.8);
-        
+
     const y = d3.scaleLinear()
     .range([height, 0])
     .domain([
-        d3.min(chartData, d => d.value) - 5,
+        0,
         d3.max(chartData, d => d.value) + 5
     ]).nice();
 

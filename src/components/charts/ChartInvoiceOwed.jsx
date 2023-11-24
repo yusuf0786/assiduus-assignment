@@ -23,35 +23,39 @@ function ChartInvoiceOwed({
 
   const [chartData, setChartData] = useState(data)
 
-    const svg = d3.select(".chart-invoice-owed-card-body svg").attr('width', svgWidth).attr('height', svgHeight);
+  const svg = d3.select(".chart-invoice-owed-card-body svg").attr('width', svgWidth).attr('height', svgHeight);
 
-    const graphArea = svg.append('g').attr('transform', `translate(${margin.left - margin.left}, ${30})`).attr('class', 'y-axis-line');
+  const isChartContainerDontExists = svg.selectAll(".chart-container").empty()
+  !isChartContainerDontExists && (svg.select('.chart-container').remove())
 
-    const x = d3.scaleBand().rangeRound([0, width]).domain(chartData.map(d => d.name)).padding(0.8);
+  const graphArea = svg.append('g').attr('transform', `translate(${margin.left - margin.left}, ${30})`).attr('class', 'chart-container')
 
-    const y = d3.scaleLinear()
-      .range([height, 0])
-      .domain([
-        d3.min(chartData, d => d.value) - 5,
-        d3.max(chartData, d => d.value) + 5
-      ]).nice();
+  const x = d3.scaleBand().rangeRound([0, width]).domain(chartData.map(d => d.name)).padding(0.8);
 
-    const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y).ticks(5);
+  const y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([
+      d3.min(chartData, d => d.value) - 5,
+      d3.max(chartData, d => d.value) + 5
+    ]).nice();
 
+  const xAxis = d3.axisBottom(x);
+  const yAxis = d3.axisLeft(y).ticks(5);
+
+  const rx = 8;
+  const ry = 8;
+
+  useEffect(() => {
     graphArea.append('g').attr('class', 'axis').attr('transform', `translate(0, ${height})`).call(xAxis).attr('class', 'x-axis-line');
 
     // graphArea.append('g').attr('class', 'axis').call(yAxis);
-
-    const rx = 8;
-    const ry = 8;
 
     graphArea
     .selectAll("bar")
     .data(chartData)
     .enter()
     .append("path").attr('class', 'path')
-    .style("fill", "rgba(71, 183, 71, 1)") 
+    .style("fill", "rgba(71, 183, 71, 1)")
     .attr("d", item => `
         M${x(item.name)},${y(item.value) + ry}
         a${rx},${ry} 0 0 1 ${rx},${-ry}
@@ -60,6 +64,7 @@ function ChartInvoiceOwed({
         v${height - y(item.value) - ry}
         h${-(x.bandwidth())}Z
     `);
+  })
 
   const updateChart = () => {
 
@@ -70,10 +75,10 @@ function ChartInvoiceOwed({
       }))
     })
 
-    var yAxizLine = graphArea.select(".y-axis-line")
-    yAxizLine.remove()
+    const chartContainer = svg.selectAll(".chart-container")
+    chartContainer.remove()
 
-    var xAxizLine = graphArea.select(".x-axis-line")
+    var xAxizLine = graphArea.selectAll(".x-axis-line")
     xAxizLine.remove()
 
     var path = graphArea.selectAll(".path")
@@ -92,7 +97,14 @@ function ChartInvoiceOwed({
         <Stack className="card-header" direction="row" justifyContent="space-between" flexWrap="wrap" sx={{boxShadow: 1, padding:"1rem"}}>
           <Typography variant="h6" component="h3" fontWeight={700}>Invoices owed to you</Typography>
           <Box className="card-interaction" display="flex">
-            <ModalComponent/>
+            <ModalComponent
+              modalBodyMaxHeight={225}
+              btn={{variant:"outlined", disableElevation:true, value:"New Sales Invoice"}}
+              head={{text:"Upload a File"}}
+              btnUpload={{text:"Upload file"}}
+              btnCancel={{text:"Cancel"}}
+              btnSubmit={{text:"Submit"}}
+              />
           </Box>
         </Stack>
         <Box className="card-body chart-invoice-owed-card-body" sx={{padding:"1rem"}}>
