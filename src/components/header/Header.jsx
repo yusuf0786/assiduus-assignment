@@ -152,7 +152,7 @@ function Header(props, ref) {
 
                         <Box display={{xs: "none", md:"flex"}} alignItems="center">
 
-                            <Button variant="outlined" onClick={props.chartDataupdateFunction} sx={{marginRight:"1rem", display: {xs: "none", md:"block"}}}>Random Data</Button>
+                            <Button variant="outlined" onClick={props.chartDataupdateFunction} sx={{marginRight:3, display: {xs: "none", md:"block"}}}>Random Data</Button>
                             
                             <Search sx={{margin:"0 !important"}}>
                                 <SearchIconWrapper><SearchIcon /></SearchIconWrapper>
