@@ -46,11 +46,19 @@ function ChartTotalCashFlow({
     
     useEffect( function() {
         svg.attr('width', svgWidth).attr('height', svgHeight);
-        graphArea.append('g').attr('transform', `translate(0, 0)`).attr('class', "xyz");
+        // graphArea.append('g').attr('transform', `translate(0, 0)`);
         
+        const isXAxisDontExists = svg.selectAll(".x-axis").empty()
+        !isXAxisDontExists && (svg.selectAll('.x-axis').remove())
         graphArea.append('g').attr('class', 'axis x-axis').attr('transform', `translate(0, ${height})`).call(xAxis);
         
         // graphArea.append('g').attr('class', 'axis').call(yAxis);
+
+        const isRectsDontExists = svg.selectAll(".rects").empty()
+        !isRectsDontExists && (svg.selectAll('.rects').remove())
+
+        var elementRets = graphArea.selectAll('.rects')
+        elementRets.remove()
 
         graphArea
             .append("g").attr('class', "rects")
@@ -89,33 +97,6 @@ function ChartTotalCashFlow({
             })
         })
 
-        var xAxisElement = graphArea.selectAll('.x-axis')
-            xAxisElement.remove()
-
-        var elementRets = graphArea.selectAll('.rects')
-        elementRets.remove()
-
-        var xyz = graphArea.selectAll('.xyz')
-        xyz.remove()
-
-        // var path = graphArea.selectAll("rect")
-        //     path.exit().remove()
-        //     path.enter()
-        //         .data(d => stackedData)
-        //         .join("rect")
-        //         .attr("fill", d => color(d.key))
-        //         .attr("rect", d => `
-        //                 M${x(d.name)},${y(d.value) + ry}
-        //                 a${rx},${ry} 0 0 1 ${rx},${-ry}
-        //                 h${x.bandwidth() - 2 * rx}
-        //                 a${rx},${ry} 0 0 1 ${rx},${ry}
-        //                 v${height - y(d.value) - ry}
-        //                 h${-(x.bandwidth())}Z
-        //             `)
-        //             .attr("x", d => x(d.name))
-        //             .attr("y", d => y(d[1]))
-        //             .attr("height", d => y(d[0]) - y(d[1]))
-        //             .attr("width",x.bandwidth())
     } // updatechart function ends 
 
     useImperativeHandle(ref, () => {
