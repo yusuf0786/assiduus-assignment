@@ -29,7 +29,7 @@ function ChartCheckingAccount({
 
   const [chartData, setChartData] = useState(data)
 
-  const width = svgWidth - margins.left - margins.right;
+  const width = svgWidth - 30;
   const height = svgHeight - margins.top - margins.bottom;
 
   const ticks = 5;
@@ -108,8 +108,8 @@ function ChartCheckingAccount({
           width={svgWidth}
           height={height + margins.top + margins.bottom}
         >
-          <g transform={`translate(${margins.left}, ${margins.top})`}>
-            <XYAxis {...{ xScale, yScale, height, ticks }} />
+          <g transform={`translate(${margins.left}, ${margins.top})`} width={width}>
+            <XYAxis {...{ xScale, yScale, height, ticks, width }} />
             <Line data={data} xScale={xScale} yScale={yScale} lineGenerator={lineGenerator} width={width} height={height} />
           </g>
         </svg>

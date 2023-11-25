@@ -82,15 +82,8 @@ const drawerStyle = {
     [`& .MuiPaper-root`]: { 
         width: drawerWidth, 
         boxSizing: 'border-box',
-        // transform: "translate(0%, 0%) !important",
         transitionProperty: "transform",
         transitionDuration: "0.5s",
-        // "@media only screen and (max-width:900px)": {
-        //     transform: "translate(100%, 0%) !important",
-        //     ...(open && { 
-        //         transform: "translate(0%, 0%) !important",
-        //     }),
-        // },
     },
     ".MuiPaper-root": {
         border: 0,
@@ -217,7 +210,7 @@ function Header(props, ref) {
                 {/* Drawer AKA sidebar */}
                 <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleCloseNavMenu}>
                     <Drawer open={open} variant={ windowWidth <= 900 ? "temporary" : "permanent"} onClose={() => setOpen(false)} anchor={windowWidth > 900 ? "left" : "right"} sx={drawerStyle}>
-                        <Toolbar>
+                        <Toolbar sx={{boxShadow:1}}>
                             <Box className="logo" display={{xs: "none", md: "block"}}>
                                 <img src={logo} alt="Logo" />
                             </Box>

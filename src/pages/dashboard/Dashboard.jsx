@@ -82,7 +82,7 @@ function Dashboard(props, ref) {
 
     return (
         <> 
-          <Grid container spacing={{ xs:2, md:5 }}>
+          <Grid container spacing={{ xs:2, md: 4.8 }}>
           {cardComponents.map( (item, index) => {
           return (
               <Grid key={index} item xs={12} lg={6} className="card-container">
